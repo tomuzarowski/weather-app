@@ -1,15 +1,14 @@
 <template>
-  <form action="">
-    <label for="city">Please, enter a city name</label>
-    <input type="text" id="city">
-  </form>
+  <Form />
 </template>
 
 <script>
+import Form from "./components/Form";
 
 export default {
   name: 'App',
   components: {
+    Form
   }
 }
 </script>
