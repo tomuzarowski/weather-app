@@ -7,6 +7,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -17,8 +18,7 @@ export default {
   },
   methods: {
     getData: function () {
-      const key = "db17ba294ac990b1d000281bf33e1951";
-      const url = `//api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${key}`;
+      const url = `//api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${process.env.VUE_APP_API_KEY}`;
       fetch(url)
           .then(response => response.json())
           .then(data => {
