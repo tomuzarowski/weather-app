@@ -2,41 +2,47 @@
   <form @submit.prevent="getData">
     <label for="city">Please, enter a city name</label>
     <input type="text" id="city" v-model="city">
-    <p class="error" v-if="cityNotFoundError">Sorry, "{{cityNotFoundName}}" was not found :(</p>
+    <p class="error" v-if="cityNotFoundError">Sorry, {{cityNotFoundName}} was not found :(</p>
 
     <img src="../assets/weather.svg" alt="Weather Icon">
   </form>
 </template>
 
 <script>
+import { ref } from "vue";
 
 export default {
-  data() {
-    return {
-      city: "",
-      cityNotFoundName: "",
-      cityNotFoundError: false
-    }
-  },
-  methods: {
-    getData: function () {
+  name: "Form",
+
+  setup() {
+    let city = ref("");
+    let cityNotFoundName = ref("");
+    let cityNotFoundError = ref(false);
+
+    function getData() {
       const url = `//api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${process.env.VUE_APP_API_KEY}`;
       fetch(url)
           .then(response => response.json())
           .then(data => {
             if (data.message === "city not found") {
-              this.cityNotFoundError = true;
-              this.cityNotFoundName = this.city;
-              this.city = "";
+              cityNotFoundError.value = true;
+              cityNotFoundName.value = city.value;
+              city.value = "";
             } else {
               console.log(data);
-              this.cityNotFoundError = false;
-              this.cityNotFoundName = "";
+              cityNotFoundError.value = false;
+              cityNotFoundName.value = "";
             }
           });
     }
-  },
-  name: "Form"
+
+    return {
+      city,
+      cityNotFoundName,
+      cityNotFoundError,
+      getData
+    }
+  }
 }
 </script>
 
@@ -45,7 +51,6 @@ form {
   align-items: center;
   display: flex;
   flex-direction: column;
-  /*position: relative;*/
 }
 
 form label {
@@ -74,7 +79,6 @@ img {
   position: absolute;
   left: 45vw;
   top: 30vh;
-  /*transform: translateY(-50%);*/
   width: 30vw;
   z-index: -1;
 }
@@ -91,5 +95,4 @@ img {
     top: 20vh;
   }
 }
-
 </style>
